@@ -12,13 +12,18 @@ const fetchCryptoData = async (endpoint, params) => {
     });
     return response.data;
   } catch (error) {
-    if (error.response) {
-      console.error("Error occurred: ", error.response.data);
-      console.error("status code: ", error.response.status);
+    //check if error response properly received from server
+    if (error.response && error.response.data && error.response.status) {
+      const { status, data } = error.response; // Extracting error info from the API response
+      console.error("Error occurred: ", status, data);
+      const errorMessage = data.status
+        ? data.status.error_message
+        : "Unknown error";
+      throw new Error(errorMessage);
     } else {
       console.error("Error message:", error.message);
+      throw new Error("Request failed");
     }
-    throw error;
   }
 };
 
