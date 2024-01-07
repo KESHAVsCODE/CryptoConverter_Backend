@@ -1,50 +1,20 @@
 // Example usage in a controller
-const fetchCryptoData = require("../services/fetchCryptoData");
+const fetchCurrencyData = require("../services/fetchCurrencyData");
 
-const getTopCoins = async (req, res) => {
+const getCryptoCurrencies = async (req, res) => {
   try {
-    const data = await fetchCryptoData("v1/cryptocurrency/listings/latest", {
+    const data = await fetchCurrencyData("v1/cryptocurrency/listings/latest", {
       start: 1,
-      limit: 10,
+      limit: 100,
     });
-    res.status(200).json({ status: "success", data: data.data });
+    const cryptoCurrencies = data.data.map(({ id, name, symbol }) => {
+      return { id, name, symbol };
+    });
+    res.status(200).json({ status: "success", data: cryptoCurrencies });
   } catch (error) {
     res.status(400).json({ status: "failed", message: error.message });
     console.error("Error:", error.message);
   }
 };
 
-const getFiatCurrencies = async (req, res) => {
-  try {
-    const data = await fetchCryptoData("v1/fiat/map");
-    res.status(200).json({ status: "success", data: data.data });
-  } catch (error) {
-    res.status(400).json({ status: "failed", message: error.message });
-    console.error("Error:", error.message);
-  }
-};
-
-const cryptoPriceConversion = async (req, res) => {
-  const { amount, id, convert } = req.query;
-  if (!amount || !id || !convert) {
-    return res.status(400).json({
-      status: "failed",
-      message: `${!amount ? "*amount*" : ""}${!id ? "*id*" : ""}${
-        !convert ? "*convert*" : ""
-      } is required`,
-    });
-  }
-  try {
-    const data = await fetchCryptoData("v2/tools/price-conversion", {
-      amount,
-      id,
-      convert,
-    });
-    res.status(200).json({ status: "success", data: data.data });
-  } catch (error) {
-    res.status(400).json({ status: "failed", message: error.message });
-    console.error("Error:", error.message);
-  }
-};
-
-module.exports = { getTopCoins, getFiatCurrencies, cryptoPriceConversion };
+module.exports = { getCryptoCurrencies };

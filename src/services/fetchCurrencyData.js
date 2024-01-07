@@ -2,7 +2,7 @@ const axios = require("axios");
 require("dotenv").config();
 
 const baseURL = "https://pro-api.coinmarketcap.com";
-const fetchCryptoData = async (endpoint, params) => {
+const fetchCurrencyData = async (endpoint, params) => {
   try {
     const response = await axios.get(`${baseURL}/${endpoint}`, {
       headers: {
@@ -27,4 +27,4 @@ const fetchCryptoData = async (endpoint, params) => {
   }
 };
 
-module.exports = fetchCryptoData;
+module.exports = fetchCurrencyData;

@@ -3,13 +3,9 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  getTopCoins,
-  getFiatCurrencies,
-  cryptoPriceConversion,
+  getCryptoCurrencies,
 } = require("../controllers/cryptoCurrencyController");
 
-router.get("/top-coins", getTopCoins);
-router.get("/fiat-currencies", getFiatCurrencies);
-router.post("/price-conversion", cryptoPriceConversion);
+router.get("/", getCryptoCurrencies);
 
 module.exports = router;
